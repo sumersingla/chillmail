@@ -5,8 +5,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class EmailSender {
-    public static void sendEmail(String to, String subject, String body) {
+public class EmailSender implements IEmailSender {
+    public void sendEmailViaGmail(String to, String subject, String body) {
         final String username = "sumersingla14@gmail.com";
         final String password = "gwjk uqlm fcfk jgof";
 
@@ -34,13 +34,5 @@ public class EmailSender {
             throw new RuntimeException(e);
         }
 
-    }
-
-    public static void main(String[] args) {
-        String to = "chillingbruhh@gmail.com";
-        String subject = "Test Email: From the chillmail App";
-        String body = "This is a test email sent via gmail from the chillmail App.";
-
-        sendEmail(to, subject, body);
     }
 }
