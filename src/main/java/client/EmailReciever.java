@@ -1,7 +1,6 @@
 package client;
 
 import javax.mail.*;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class EmailReciever implements IEmailReciever {
@@ -35,10 +34,5 @@ public class EmailReciever implements IEmailReciever {
             e.printStackTrace();
         }
 
-    }
-
-    public static void main(String[] args) {
-        EmailReciever emailReciever = new EmailReciever();
-        emailReciever.receiveEmail("sumersingla14@gmail.com", "gwjk uqlm fcfk jgof");
     }
 }
