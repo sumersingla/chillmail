@@ -9,37 +9,17 @@ import java.io.File;
 import java.util.Properties;
 
 public class EmailSender implements IEmailSender {
-    private final String username = "sumersingla14@gmail.com";
-    private final String password = "gwjk uqlm fcfk jgof";
-    private final Properties smtpProps = new Properties();
 
-    public void sendEmailViaGmail(String to, String subject, String body) {
-
-        getSMTPProperties(smtpProps);
-
-        Session session = Session.getInstance(smtpProps, new Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(username, password);
-        }});
-
-        try {
-            MimeMessage mimeMessage = new MimeMessage(session);
-            mimeMessage.setFrom(new InternetAddress(username));
-            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            mimeMessage.setSubject(subject);
-            mimeMessage.setText(body);
-
-            Transport.send(mimeMessage);
-            System.out.println("Email sent successfully via Gmail");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    private final String username = "sumersingla14@gmail.com";
+//    private final String password = "gwjk uqlm fcfk jgof";
+    private Properties smtpProps = new Properties();
 
     /* Each file selected for attachment is added as a separate MimeBodyPart,
     and all parts (text and attachments) are combined into a Multipart object. */
     public void sendEmailViaGmailWithAttachments(String to, String subject, String body, File[] attachments){
+        String username = EmailSessionManager.getCurrentUsername();
+        String password = EmailSessionManager.getCurrentPassword();
+
         getSMTPProperties(smtpProps);
 
         Session session = Session.getInstance(smtpProps, new Authenticator() {
@@ -50,10 +30,10 @@ public class EmailSender implements IEmailSender {
         try {
             Message mimeMessage = new MimeMessage(session);
             mimeMessage.setFrom(new InternetAddress(username));
-            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            mimeMessage.addRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             mimeMessage.setSubject(subject);
-            Multipart multipart = new MimeMultipart();
 
+            Multipart multipart = new MimeMultipart();
             MimeBodyPart textPart = new MimeBodyPart();
             textPart.setText(body);
             multipart.addBodyPart(textPart);
@@ -62,6 +42,7 @@ public class EmailSender implements IEmailSender {
                 MimeBodyPart attachmentPart = new MimeBodyPart();
                 try {
                     attachmentPart.attachFile(attachment);
+                    multipart.addBodyPart(attachmentPart);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
