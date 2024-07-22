@@ -1,38 +1,24 @@
 package client;
 
 import javax.mail.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class EmailReciever implements IEmailReciever {
 
-    public void receiveEmail(String emailId, String password) {
-        Properties props = new Properties();
-        props.put("mail.store.protocols", "imaps");
-        props.put("mail.imaps.host", "imap.gmail.com");
-        props.put("mail.imaps.port", "993");
-        props.put("mail.imaps.ssl.enable", "true");
+    private static String username = "";
+    private static String password = "";
 
-        try{
-            Session session = Session.getDefaultInstance(props);
-            Store store = session.getStore("imaps");
-            store.connect("imap.gmail.com", emailId, password);
+    private static void setCreds(String usrname, String pass){
+        username = usrname;
+        password = pass;
+    }
 
-            Folder emailFolder = store.getFolder("INBOX");
-            emailFolder.open(Folder.READ_ONLY);
-            Message[] messages = emailFolder.getMessages();
-            System.out.println("Number of emails: " + messages.length);
-//            Arrays.stream(messages).forEach(message -> {
-//                try {
-//                    System.out.println("Email Subject: " + message.getSubject());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            });
-            emailFolder.close(false);
-            store.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    @Override
+    public Message[] receiveEmail(String emailId, String password) throws MessagingException {
+        EmailSessionManager manager = EmailSessionManager.getManager();
+        return manager.receiveEmails();
     }
 }
