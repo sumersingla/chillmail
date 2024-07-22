@@ -17,29 +17,8 @@ public class EmailReciever implements IEmailReciever {
     }
 
     @Override
-    public Message[] receiveEmail(String emailId, String password) {
-        Properties props = new Properties();
-        props.put("mail.store.protocols", "imaps");
-        props.put("mail.imaps.host", "imap.gmail.com");
-        props.put("mail.imaps.port", "993");
-        props.put("mail.imaps.ssl.enable", "true");
-
-        List<Message> messageList = new ArrayList<Message>();
-
-        try{
-            Session emailSession = Session.getInstance(props);
-            Store emailStore = emailSession.getStore("imaps");
-            emailStore.connect("imap.gmail.com", emailId, password);
-
-            Folder emailFolder = emailStore.getFolder("INBOX");
-            emailFolder.open(Folder.READ_ONLY);
-            Message[] messages = emailFolder.getMessages();
-            messageList.addAll(Arrays.asList(messages));
-            emailFolder.close(false);
-            emailStore.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return messageList.toArray(new Message[0]);
+    public Message[] receiveEmail(String emailId, String password) throws MessagingException {
+        EmailSessionManager manager = EmailSessionManager.getManager();
+        return manager.receiveEmails();
     }
 }

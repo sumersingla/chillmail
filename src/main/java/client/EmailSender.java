@@ -12,11 +12,11 @@ public class EmailSender implements IEmailSender {
 
 //    private final String username = "sumersingla14@gmail.com";
 //    private final String password = "gwjk uqlm fcfk jgof";
-    private Properties smtpProps = new Properties();
+    private static Properties smtpProps = new Properties();
 
     /* Each file selected for attachment is added as a separate MimeBodyPart,
     and all parts (text and attachments) are combined into a Multipart object. */
-    public void sendEmailViaGmailWithAttachments(String to, String subject, String body, File[] attachments){
+    public static void sendEmailViaGmailWithAttachments(String to, String subject, String body, File[] attachments){
         String username = EmailSessionManager.getCurrentUsername();
         String password = EmailSessionManager.getCurrentPassword();
 
@@ -56,7 +56,7 @@ public class EmailSender implements IEmailSender {
         }
     }
 
-    private void getSMTPProperties(Properties props) {
+    private static void getSMTPProperties(Properties props) {
         props.setProperty("mail.smtp.host", "smtp.gmail.com");
         props.setProperty("mail.smtp.port", "587");
         props.setProperty("mail.smtp.auth", "true");
